@@ -126,11 +126,40 @@ textarea:focus-visible {
   gap: 13px;
 }
 
-.brandLogo {
+.brandLogoWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   width: 46px;
   height: 46px;
-  object-fit: contain;
+}
+
+.brandLogoWrap::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 255, 255, 0.82) 28%,
+    rgba(238, 213, 178, 0.48) 52%,
+    rgba(238, 213, 178, 0) 76%
+  );
+  filter: blur(7px);
+  pointer-events: none;
+}
+
+.brandLogo {
+  position: relative;
+  z-index: 1;
   display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .brand strong,
@@ -942,7 +971,7 @@ textarea:focus {
     font-size: 0.62rem;
   }
 
-  .brandLogo {
+  .brandLogoWrap {
     width: 40px;
     height: 40px;
   }

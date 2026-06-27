@@ -8,7 +8,13 @@ export function Hero() {
       <div className="heroOverlay" />
       <header className="topNav">
         <div className="brand" aria-label="기쁨교회">
-          <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
+          <div className="brandLogoWrap">
+            <img
+              className="brandLogo"
+              src={logoImage}
+              alt="기쁨교회 로고"
+            />
+          </div>
           <div className="brandText">
             <strong>기쁨교회</strong>
             <span>KIPPEUM CHURCH</span>
