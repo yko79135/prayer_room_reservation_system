@@ -1,6 +1,6 @@
 # Kippeum Church Prayer Room Reservation App
 
-React + Vite + Supabase reservation app for 기쁨의교회 옥상 기도실.
+React + Vite + Supabase reservation app for 기쁨교회 옥상 기도실.
 
 ## Features
 
