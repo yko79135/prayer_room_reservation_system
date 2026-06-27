@@ -200,6 +200,12 @@ textarea:focus-visible {
   transform: translateY(-1px);
 }
 
+.adminButton.active {
+  background: rgba(201, 157, 91, 0.32);
+  border-color: rgba(244, 215, 167, 0.82);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18), 0 0 0 3px rgba(244, 215, 167, 0.18);
+}
+
 .heroText {
   position: relative;
   z-index: 2;
@@ -388,7 +394,7 @@ h3 {
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 150px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 150px);
   gap: 20px;
   align-items: end;
   border-radius: 24px;
@@ -786,7 +792,15 @@ textarea:focus {
   color: var(--muted);
 }
 
-.reservationItem button {
+.reservationActions {
+  display: flex;
+  flex: 0 1 160px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.reservationActions button {
   min-height: 38px;
   border: 1px solid rgba(153, 67, 46, 0.22);
   background: #fff7f4;
@@ -797,7 +811,7 @@ textarea:focus {
   transition: background 0.16s ease, transform 0.16s ease;
 }
 
-.reservationItem button:hover {
+.reservationActions button:hover {
   background: #fff0ea;
   transform: translateY(-1px);
 }
@@ -1082,6 +1096,20 @@ textarea:focus {
 
   .selectedBar {
     padding: 14px;
+  }
+
+  .reservationItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .reservationActions {
+    flex: 1 1 auto;
+    justify-content: stretch;
+  }
+
+  .reservationActions button {
+    width: 100%;
   }
 
   .selectedCount {

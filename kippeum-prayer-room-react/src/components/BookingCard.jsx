@@ -4,11 +4,9 @@ import { SlotGrid } from "./SlotGrid";
 
 export function BookingCard({
   date,
-  search,
   reservationsByKey,
   selectedSlots,
   onDateChange,
-  onSearchChange,
   onToggleSlot,
   onReserveSelected
 }) {
@@ -36,7 +34,7 @@ export function BookingCard({
 
       <div className="divider" />
 
-      <div className="formGrid" aria-label="예약 날짜와 예약자 검색">
+      <div className="formGrid" aria-label="예약 날짜 선택">
         <label className="dateField">
           <span>날짜 선택</span>
           <input
@@ -45,16 +43,6 @@ export function BookingCard({
             min={todayString()}
             max={maxDateString()}
             onChange={(e) => onDateChange(e.target.value)}
-          />
-        </label>
-
-        <label>
-          <span>예약자 이름 검색</span>
-          <input
-            type="text"
-            placeholder="이름을 입력하세요"
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
           />
         </label>
 
