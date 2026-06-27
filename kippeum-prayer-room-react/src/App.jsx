@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { BookingCard } from "./components/BookingCard";
 import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
@@ -8,8 +8,8 @@ import { todayString, useReservations } from "./hooks/useReservations";
 
 export function App() {
   const [date, setDate] = useState(todayString());
-  const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const {
     reservations,
@@ -18,15 +18,9 @@ export function App() {
     loading,
     toggleSlot,
     saveReservation,
-    deleteReservation
+    deleteReservation,
+    deleteReservationsByName
   } = useReservations(date);
-
-  const filteredReservations = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return reservations
-      .filter((r) => !q || r.name.toLowerCase().includes(q))
-      .sort((a, b) => a.time.localeCompare(b.time));
-  }, [reservations, search]);
 
   function openReserveModal() {
     if (selectedSlots.length === 0) {
@@ -39,24 +33,26 @@ export function App() {
 
   return (
     <div className="app">
-      <Hero />
+      <Hero isAdminMode={isAdminMode} onAdminModeChange={setIsAdminMode} />
 
       <main className="shell">
         <BookingCard
           date={date}
-          search={search}
           reservationsByKey={reservationsByKey}
           selectedSlots={selectedSlots}
           onDateChange={setDate}
-          onSearchChange={setSearch}
           onToggleSlot={toggleSlot}
           onReserveSelected={openReserveModal}
         />
 
         <ReservationList
-          reservations={filteredReservations}
+          reservations={reservations}
           loading={loading}
-          onDeleteReservation={deleteReservation}
+          isAdminMode={isAdminMode}
+          onDeleteReservation={(reservation) => deleteReservation(reservation, { isAdminMode })}
+          onDeleteReservationsByName={(reservation) =>
+            deleteReservationsByName(reservation, { isAdminMode })
+          }
         />
       </main>
 
