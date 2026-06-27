@@ -1,3 +1,6 @@
+import { CalendarDays, Clock, Lock } from "lucide-react";
+import heroImage from "../assets/kippeum-church-hero.png";
+import logoImage from "../assets/kippeum-church-logo.svg";
 import { CalendarDays, Church, Clock, Lock } from "lucide-react";
 import heroImage from "../assets/kippeum-church-hero.png";
 
@@ -7,6 +10,9 @@ export function Hero() {
       <div className="heroOverlay" />
       <header className="topNav">
         <div className="brand">
+          <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
+          <div>
+            <strong>기쁨교회</strong>
           <Church size={34} />
           <div>
             <strong>기쁨의교회</strong>
