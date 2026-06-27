@@ -1,5 +1,4 @@
 import logoImage from "../assets/kippeum-church-logo.svg";
-import { Church } from "lucide-react";
 
 export function Footer() {
   return (
@@ -8,13 +7,6 @@ export function Footer() {
         <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
         <div className="brandText">
           <strong>기쁨교회</strong>
-      <div className="footerBrand">
-        <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
-        <div>
-          <strong>기쁨교회</strong>
-        <Church size={32} />
-        <div>
-          <strong>기쁨의교회</strong>
           <span>KIPPEUM CHURCH</span>
         </div>
       </div>
