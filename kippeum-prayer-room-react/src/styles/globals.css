@@ -1120,3 +1120,124 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+.reservationToolbar {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.secondaryAction,
+.selectionActions button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(116, 88, 61, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 250, 243, 0.92);
+  color: var(--brown);
+  padding: 10px 14px;
+  font-weight: 800;
+  transition: background 0.16s ease, transform 0.16s ease, opacity 0.16s ease;
+}
+
+.secondaryAction:hover:not(:disabled),
+.selectionActions button:hover:not(:disabled) {
+  background: #f7ead6;
+  transform: translateY(-1px);
+}
+
+.secondaryAction:disabled,
+.selectionActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.selectionPanel {
+  grid-column: 1 / -1;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(201, 157, 91, 0.22);
+  border-radius: 20px;
+  background: rgba(255, 243, 223, 0.72);
+  text-align: left;
+}
+
+.selectionPanel strong {
+  display: inline-flex;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: #f0dfc5;
+  color: #80582e;
+  padding: 7px 12px;
+  font-weight: 800;
+}
+
+.selectionActions {
+  display: grid;
+  gap: 8px;
+}
+
+.selectionActions .dangerAction {
+  border-color: rgba(153, 67, 46, 0.24);
+  background: #fff7f4;
+  color: #9e402c;
+}
+
+.selectionActions .dangerAction:hover:not(:disabled) {
+  background: #fff0ea;
+}
+
+.reservationItem.selectableForCancel {
+  cursor: pointer;
+}
+
+.reservationItem.selectedForCancel {
+  border-color: var(--selected-line);
+  background: linear-gradient(180deg, #fffaf1, var(--selected));
+  box-shadow: 0 18px 34px rgba(201, 157, 91, 0.16);
+}
+
+.reservationItem.disabledForSelection {
+  opacity: 0.52;
+  cursor: not-allowed;
+  background: rgba(236, 233, 228, 0.62);
+}
+
+.reservationCheckbox {
+  flex: 0 0 auto;
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.reservationCheckbox:disabled {
+  cursor: not-allowed;
+}
+
+.reservationDetails {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+@media (max-width: 1080px) {
+  .reservationToolbar,
+  .selectionPanel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .reservationItem.selectableForCancel,
+  .reservationItem.disabledForSelection {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .selectionPanel {
+    padding: 12px;
+  }
+}
