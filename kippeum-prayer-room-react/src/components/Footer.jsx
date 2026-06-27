@@ -4,6 +4,10 @@ import { Church } from "lucide-react";
 export function Footer() {
   return (
     <footer className="footer">
+      <div className="footerBrand" aria-label="기쁨교회">
+        <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
+        <div className="brandText">
+          <strong>기쁨교회</strong>
       <div className="footerBrand">
         <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
         <div>

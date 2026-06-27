@@ -9,6 +9,10 @@ export function Hero() {
     <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
       <div className="heroOverlay" />
       <header className="topNav">
+        <div className="brand" aria-label="기쁨교회">
+          <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
+          <div className="brandText">
+            <strong>기쁨교회</strong>
         <div className="brand">
           <img className="brandLogo" src={logoImage} alt="기쁨교회 로고" />
           <div>
