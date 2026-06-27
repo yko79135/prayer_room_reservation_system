@@ -24,7 +24,7 @@ export function BookingCard({
         <div>
           <span className="sectionEyebrow">Reservation Guide</span>
           <h2 id="booking-title">기도실 예약 안내</h2>
-          <p className="infoLead">원하시는 날짜와 시간을 선택해 조용한 기도 시간을 준비하세요.</p>
+          <p className="infoLead">원하시는 날짜와 시간을 선택하세요.</p>
           <ul>
             <li>30분 단위로 예약할 수 있습니다.</li>
             <li>현재 시간 기준 한 달 앞까지 예약 가능합니다.</li>
