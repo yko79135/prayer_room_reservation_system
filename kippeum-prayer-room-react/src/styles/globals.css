@@ -24,10 +24,12 @@
 
 html {
   background: var(--cream);
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background:
     radial-gradient(circle at 12% 12%, rgba(201, 157, 91, 0.17), transparent 28rem),
@@ -45,6 +47,9 @@ button,
 input,
 textarea {
   font: inherit;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 button {
@@ -60,6 +65,9 @@ textarea:focus-visible {
 
 .app {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .hero {
@@ -96,6 +104,8 @@ textarea:focus-visible {
 .shell,
 .footer {
   width: min(1160px, calc(100% - 56px));
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .topNav {
@@ -111,6 +121,7 @@ textarea:focus-visible {
 .brand,
 .footerBrand {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 13px;
 }
@@ -237,6 +248,7 @@ textarea:focus-visible {
 
 .shell {
   margin: -46px auto 0;
+  min-width: 0;
   position: relative;
   z-index: 5;
   display: grid;
@@ -256,14 +268,30 @@ textarea:focus-visible {
 }
 
 .bookingCard {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: clamp(30px, 4vw, 54px);
+  overflow-wrap: anywhere;
 }
 
 .infoBlock {
   display: grid;
+  min-width: 0;
   grid-template-columns: auto 1fr;
   gap: 22px;
   align-items: flex-start;
+}
+
+.infoBlock > *,
+.formGrid > *,
+.slotHeader > *,
+.selectedBar > *,
+.sideCard > *,
+.reservationItem > *,
+.footer > * {
+  min-width: 0;
 }
 
 .iconCircle {
@@ -327,6 +355,10 @@ h3 {
 
 .formGrid {
   display: grid;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   grid-template-columns: 1fr 1fr 150px;
   gap: 20px;
   align-items: end;
@@ -335,6 +367,13 @@ h3 {
   background: rgba(250, 246, 239, 0.82);
   border: 1px solid rgba(116, 88, 61, 0.10);
   box-shadow: 0 14px 34px rgba(57, 39, 25, 0.045) inset;
+}
+
+label {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 label span {
@@ -348,6 +387,9 @@ label span {
 input,
 textarea {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   min-height: 56px;
   border: 1px solid rgba(81, 62, 48, 0.14);
   background: rgba(255, 255, 255, 0.92);
@@ -360,6 +402,14 @@ textarea {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
 }
 
+input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: block;
+}
+
 input:focus,
 textarea:focus {
   border-color: rgba(159, 113, 56, 0.58);
@@ -370,6 +420,10 @@ textarea:focus {
 .primarySmall,
 .selectedBar button,
 .modalActions button {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   min-height: 56px;
   border: 0;
   border-radius: 16px;
@@ -390,6 +444,7 @@ textarea:focus {
 }
 
 .slotHeader {
+  min-width: 0;
   margin: 42px 0 18px;
   display: flex;
   justify-content: space-between;
@@ -409,6 +464,7 @@ textarea:focus {
 
 .legend {
   display: flex;
+  min-width: 0;
   gap: 10px 14px;
   flex-wrap: wrap;
   font-size: 0.92rem;
@@ -417,6 +473,7 @@ textarea:focus {
 
 .legend span {
   display: inline-flex;
+  min-width: 0;
   align-items: center;
   gap: 7px;
 }
@@ -446,11 +503,19 @@ textarea:focus {
 
 .slotGrid {
   display: grid;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
 }
 
 .slot {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   min-height: 82px;
   border-radius: 20px;
   border: 1px solid var(--sage-line);
@@ -513,6 +578,10 @@ textarea:focus {
 }
 
 .selectedBar {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   margin-top: 30px;
   padding: 16px;
   border-radius: 24px;
@@ -525,6 +594,7 @@ textarea:focus {
 }
 
 .selectedBar div {
+  min-width: 0;
   padding: 0 8px;
 }
 
@@ -539,6 +609,9 @@ textarea:focus {
 }
 
 .selectedBar strong {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 1.02rem;
   line-height: 1.65;
 }
@@ -549,6 +622,10 @@ textarea:focus {
 }
 
 .sideCard {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 34px 24px 26px;
   text-align: center;
   position: sticky;
@@ -600,6 +677,7 @@ textarea:focus {
 }
 
 .reservationItem {
+  min-width: 0;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.72);
   border-radius: 18px;
@@ -845,7 +923,7 @@ textarea:focus {
   .heroText,
   .shell,
   .footer {
-    width: calc(100% - 24px);
+    width: calc(100% - 32px);
   }
 
   .hero {
@@ -903,15 +981,17 @@ textarea:focus {
 
   .bookingCard,
   .modal {
-    padding: 22px;
+    padding: 20px;
   }
 
   .formGrid {
+    gap: 14px;
     padding: 14px;
   }
 
   .slotGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .selectedBar {
