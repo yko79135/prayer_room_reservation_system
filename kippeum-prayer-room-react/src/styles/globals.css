@@ -118,20 +118,8 @@ textarea:focus-visible {
 .brandLogo {
   width: 46px;
   height: 46px;
-  border-radius: 999px;
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.92);
-  padding: 5px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-}
-
-.footerBrand .brandLogo {
-  background: white;
-  box-shadow: 0 10px 24px rgba(57, 39, 25, 0.08);
-}
-
-.brand svg {
-  filter: drop-shadow(0 7px 18px rgba(0, 0, 0, 0.20));
+  display: block;
 }
 
 .brand strong,

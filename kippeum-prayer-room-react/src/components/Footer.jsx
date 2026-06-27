@@ -1,4 +1,4 @@
-import logoImage from "../assets/kippeum-church-logo.svg";
+import logoImage from "../assets/kippeum-church-logo-original.png";
 
 export function Footer() {
   return (
