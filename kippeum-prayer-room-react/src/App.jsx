@@ -19,7 +19,7 @@ export function App() {
     toggleSlot,
     saveReservation,
     deleteReservation,
-    deleteReservationsByName
+    deleteReservationsByIds
   } = useReservations(date);
 
   function openReserveModal() {
@@ -46,13 +46,12 @@ export function App() {
         />
 
         <ReservationList
+          date={date}
           reservations={reservations}
           loading={loading}
           isAdminMode={isAdminMode}
           onDeleteReservation={(reservation) => deleteReservation(reservation, { isAdminMode })}
-          onDeleteReservationsByName={(reservation) =>
-            deleteReservationsByName(reservation, { isAdminMode })
-          }
+          onDeleteReservationsByIds={deleteReservationsByIds}
         />
       </main>
 

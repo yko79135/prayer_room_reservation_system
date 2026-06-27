@@ -44,7 +44,7 @@ export function reservationKey(date, time) {
   return `${date}_${time}`;
 }
 
-function normalizeName(name) {
+export function normalizeName(name = "") {
   return name.trim();
 }
 
@@ -158,44 +158,22 @@ export function useReservations(date) {
     await loadReservations();
   }
 
-  async function deleteReservationsByName(reservation, { isAdminMode = false } = {}) {
-    const normalizedName = normalizeName(reservation.name);
-    let matchingReservations = reservations.filter(
-      (item) => normalizeName(item.name) === normalizedName
-    );
-
-    if (!isAdminMode) {
-      const password = prompt(`${reservation.name}님의 예약 취소 비밀번호를 입력하세요.`);
-
-      if (!password) return;
-
-      matchingReservations = matchingReservations.filter((item) => item.cancel_code === password);
-
-      if (matchingReservations.length === 0) {
-        alert("이름 또는 취소 비밀번호가 일치하는 예약이 없습니다.");
-        return;
-      }
+  async function deleteReservationsByIds(ids, { successMessage } = {}) {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      alert("취소할 예약을 선택해주세요.");
+      return false;
     }
 
-    if (matchingReservations.length === 0) {
-      alert("이름 또는 취소 비밀번호가 일치하는 예약이 없습니다.");
-      return;
-    }
-
-    if (!confirm(`${normalizedName}님의 예약 ${matchingReservations.length}개를 모두 취소하시겠습니까?`)) {
-      return;
-    }
-
-    const ids = matchingReservations.map((item) => item.id);
     const { error } = await supabase.from(TABLE_NAME).delete().in("id", ids);
 
     if (error) {
       alert("삭제 실패: " + error.message);
-      return;
+      return false;
     }
 
-    alert(`${normalizedName}님의 예약 ${matchingReservations.length}개가 취소되었습니다.`);
+    if (successMessage) alert(successMessage);
     await loadReservations();
+    return true;
   }
 
   return {
@@ -206,6 +184,6 @@ export function useReservations(date) {
     toggleSlot,
     saveReservation,
     deleteReservation,
-    deleteReservationsByName
+    deleteReservationsByIds
   };
 }
