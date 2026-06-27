@@ -1,6 +1,6 @@
 import { CalendarDays, Clock, Lock } from "lucide-react";
 import heroImage from "../assets/kippeum-church-hero.png";
-import logoImage from "../assets/kippeum-church-logo.svg";
+import logoImage from "../assets/kippeum-church-logo-original.png";
 
 export function Hero() {
   return (
