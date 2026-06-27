@@ -388,7 +388,7 @@ h3 {
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  grid-template-columns: 1fr 1fr 150px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 150px);
   gap: 20px;
   align-items: end;
   border-radius: 24px;
@@ -400,9 +400,32 @@ h3 {
 
 label {
   min-width: 0;
+  min-inline-size: 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.formGrid,
+.formGrid > *,
+.formGrid label {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-inline-size: 0;
+  box-sizing: border-box;
+}
+
+.formGrid label,
+.dateField {
+  overflow: hidden;
+}
+
+.dateField {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-inline-size: 0;
 }
 
 label span {
@@ -432,11 +455,29 @@ textarea {
 }
 
 input[type="date"] {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
   display: block;
+  width: 100%;
+  inline-size: 100%;
+  max-width: 100%;
+  max-inline-size: 100%;
+  min-width: 0;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
 }
 
 input:focus,
@@ -915,9 +956,12 @@ textarea:focus {
     padding: 26px;
   }
 
-  .infoBlock,
-  .formGrid {
+  .infoBlock {
     grid-template-columns: 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .infoBlock ul {
@@ -1012,7 +1056,21 @@ textarea:focus {
     padding: 20px;
   }
 
+  .bookingCard,
+  .formGrid,
+  .formGrid > *,
+  .formGrid label,
+  .formGrid input,
+  .formGrid button {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
   .formGrid {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
     gap: 14px;
     padding: 14px;
   }
