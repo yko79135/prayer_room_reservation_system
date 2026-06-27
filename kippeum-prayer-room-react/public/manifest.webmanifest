@@ -5,14 +5,20 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f2ea",
-  "theme_color": "#4b2d1f",
+  "background_color": "#f7f0e5",
+  "theme_color": "#ead2ae",
   "icons": [
     {
-      "src": "/app-icon.png",
+      "src": "/kippeum-app-icon.png?v=2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/kippeum-app-icon.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
