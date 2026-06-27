@@ -37,7 +37,7 @@ export function BookingCard({
       <div className="divider" />
 
       <div className="formGrid" aria-label="예약 날짜와 예약자 검색">
-        <label>
+        <label className="dateField">
           <span>날짜 선택</span>
           <input
             type="date"
