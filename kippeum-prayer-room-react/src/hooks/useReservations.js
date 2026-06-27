@@ -1,0 +1,160 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { supabase, TABLE_NAME } from "../lib/supabase";
+
+export const ADMIN_PASSWORD = "1234";
+
+export function pad(n) {
+  return String(n).padStart(2, "0");
+}
+
+export function toDateString(d) {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+export function todayString() {
+  return toDateString(new Date());
+}
+
+export function maxDateString() {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  return toDateString(d);
+}
+
+function nowMinutes() {
+  const d = new Date();
+  return d.getHours() * 60 + d.getMinutes();
+}
+
+export function timeToMinutes(time) {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+}
+
+export function generateSlots() {
+  const slots = [];
+  for (let h = 0; h < 24; h++) {
+    slots.push(`${pad(h)}:00`);
+    slots.push(`${pad(h)}:30`);
+  }
+  return slots;
+}
+
+export function reservationKey(date, time) {
+  return `${date}_${time}`;
+}
+
+export function isPastSlot(date, time) {
+  if (date !== todayString()) return false;
+  return timeToMinutes(time) <= nowMinutes();
+}
+
+export function useReservations(date) {
+  const [reservations, setReservations] = useState([]);
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const reservationsByKey = useMemo(() => {
+    return Object.fromEntries(reservations.map((r) => [r.reservation_key, r]));
+  }, [reservations]);
+
+  const loadReservations = useCallback(async () => {
+    setSelectedSlots([]);
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from(TABLE_NAME)
+      .select("*")
+      .eq("date", date)
+      .order("time", { ascending: true });
+
+    if (error) {
+      alert("예약 정보를 불러오지 못했습니다: " + error.message);
+      setReservations([]);
+    } else {
+      setReservations(data || []);
+    }
+
+    setLoading(false);
+  }, [date]);
+
+  useEffect(() => {
+    loadReservations();
+  }, [loadReservations]);
+
+  function toggleSlot(time) {
+    if (date < todayString() || date > maxDateString() || isPastSlot(date, time)) {
+      alert("예약 가능한 시간이 아닙니다.");
+      return;
+    }
+
+    const key = reservationKey(date, time);
+
+    setSelectedSlots((prev) => {
+      const exists = prev.some((s) => s.reservation_key === key);
+
+      if (exists) {
+        return prev.filter((s) => s.reservation_key !== key);
+      }
+
+      return [...prev, { date, time, reservation_key: key }].sort((a, b) =>
+        a.time.localeCompare(b.time)
+      );
+    });
+  }
+
+  async function saveReservation({ name, cancelCode, note }) {
+    const payloads = selectedSlots.map((slot) => ({
+      reservation_key: slot.reservation_key,
+      date: slot.date,
+      time: slot.time,
+      name: name.trim(),
+      cancel_code: cancelCode.trim(),
+      note: note.trim()
+    }));
+
+    const { error } = await supabase.from(TABLE_NAME).insert(payloads);
+
+    if (error) {
+      if (error.message.includes("duplicate") || error.code === "23505") {
+        alert("선택한 시간 중 이미 예약된 시간이 있습니다. 다시 선택해주세요.");
+      } else {
+        alert("예약 저장 실패: " + error.message);
+      }
+      await loadReservations();
+      return false;
+    }
+
+    alert(`${payloads.length}개 시간이 예약되었습니다.`);
+    await loadReservations();
+    return true;
+  }
+
+  async function deleteReservation(reservation) {
+    const password = prompt(
+      `${reservation.name}님의 예약을 삭제하려면 예약자 비밀번호 또는 관리자 비밀번호를 입력하세요.`
+    );
+
+    if (!password) return;
+
+    if (password !== ADMIN_PASSWORD && password !== reservation.cancel_code) {
+      alert("비밀번호가 틀렸습니다.");
+      return;
+    }
+
+    const { error } = await supabase.from(TABLE_NAME).delete().eq("id", reservation.id);
+
+    if (error) alert("삭제 실패: " + error.message);
+    await loadReservations();
+  }
+
+  return {
+    reservations,
+    reservationsByKey,
+    selectedSlots,
+    loading,
+    toggleSlot,
+    saveReservation,
+    deleteReservation
+  };
+}
