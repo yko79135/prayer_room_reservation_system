@@ -52,7 +52,9 @@ export function AdminPasswordModal({ open, onClose, onSuccess }) {
             ref={inputRef}
             type="password"
             autoComplete="current-password"
-            inputMode="numeric"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
