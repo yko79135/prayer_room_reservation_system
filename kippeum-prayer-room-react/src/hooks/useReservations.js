@@ -53,7 +53,7 @@ export function isPastSlot(date, time) {
   return timeToMinutes(time) <= nowMinutes();
 }
 
-export function useReservations(date) {
+export function useReservations(date, notify = () => {}) {
   const [reservations, setReservations] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ export function useReservations(date) {
       .order("time", { ascending: true });
 
     if (error) {
-      alert("예약 정보를 불러오지 못했습니다: " + error.message);
+      notify("예약 정보를 불러오지 못했습니다: " + error.message);
       setReservations([]);
     } else {
       setReservations(data || []);
@@ -88,7 +88,7 @@ export function useReservations(date) {
 
   function toggleSlot(time) {
     if (date < todayString() || date > maxDateString() || isPastSlot(date, time)) {
-      alert("예약 가능한 시간이 아닙니다.");
+      notify("예약 가능한 시간이 아닙니다.");
       return;
     }
 
@@ -121,57 +121,51 @@ export function useReservations(date) {
 
     if (error) {
       if (error.message.includes("duplicate") || error.code === "23505") {
-        alert("선택한 시간 중 이미 예약된 시간이 있습니다. 다시 선택해주세요.");
+        notify("선택한 시간 중 이미 예약된 시간이 있습니다. 다시 선택해주세요.");
       } else {
-        alert("예약 저장 실패: " + error.message);
+        notify("예약 저장에 실패했습니다: " + error.message);
       }
       await loadReservations();
       return false;
     }
 
-    alert(`${payloads.length}개 시간이 예약되었습니다.`);
+    notify(`${payloads.length}개 시간이 예약되었습니다.`);
     await loadReservations();
     return true;
   }
 
-  async function deleteReservation(reservation, { isAdminMode = false } = {}) {
-    if (!confirm(`${reservation.name}님의 ${reservation.time} 예약을 취소하시겠습니까?`)) {
-      return;
-    }
-
-    if (!isAdminMode) {
-      const password = prompt(
-        `${reservation.name}님의 예약을 삭제하려면 예약자 비밀번호 또는 관리자 비밀번호를 입력하세요.`
-      );
-
-      if (!password) return;
-
-      if (password !== ADMIN_PASSWORD && password !== reservation.cancel_code) {
-        alert("비밀번호가 틀렸습니다.");
-        return;
-      }
+  async function deleteReservation(reservation, { isAdminMode = false, password = "" } = {}) {
+    if (!isAdminMode && password !== ADMIN_PASSWORD && password !== reservation.cancel_code) {
+      notify("비밀번호가 틀렸습니다.");
+      return false;
     }
 
     const { error } = await supabase.from(TABLE_NAME).delete().eq("id", reservation.id);
 
-    if (error) alert("삭제 실패: " + error.message);
+    if (error) {
+      notify("삭제 실패: " + error.message);
+      return false;
+    }
+
+    notify("선택한 예약이 취소되었습니다.");
     await loadReservations();
+    return true;
   }
 
   async function deleteReservationsByIds(ids, { successMessage } = {}) {
     if (!Array.isArray(ids) || ids.length === 0) {
-      alert("취소할 예약을 선택해주세요.");
+      notify("취소할 예약을 선택해주세요.");
       return false;
     }
 
     const { error } = await supabase.from(TABLE_NAME).delete().in("id", ids);
 
     if (error) {
-      alert("삭제 실패: " + error.message);
+      notify("삭제 실패: " + error.message);
       return false;
     }
 
-    if (successMessage) alert(successMessage);
+    if (successMessage) notify(successMessage);
     await loadReservations();
     return true;
   }

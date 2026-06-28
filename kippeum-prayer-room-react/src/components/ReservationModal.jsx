@@ -5,15 +5,20 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
   const [name, setName] = useState("");
   const [cancelCode, setCancelCode] = useState("");
   const [note, setNote] = useState("");
+  const [error, setError] = useState("");
 
   async function handleSave() {
-    if (!name.trim()) return alert("이름을 입력해주세요.");
+    if (!name.trim()) {
+      setError("이름을 입력해주세요.");
+      return;
+    }
     if (!cancelCode.trim() || cancelCode.trim().length < 4) {
-      return alert("본인 삭제용 비밀번호를 4자리 이상 입력해주세요.");
+      setError("본인 삭제용 비밀번호를 4자리 이상 입력해주세요.");
+      return;
     }
 
-    await onSave({ name, cancelCode, note });
-    onClose();
+    const success = await onSave({ name, cancelCode, note });
+    if (success) onClose();
   }
 
   return (
@@ -32,7 +37,7 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
 
         <label>
           <span>이름</span>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="예: 홍길동" />
+          <input value={name} onChange={(e) => { setName(e.target.value); setError(""); }} placeholder="예: 홍길동" />
         </label>
 
         <label>
@@ -40,7 +45,7 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
           <input
             type="password"
             value={cancelCode}
-            onChange={(e) => setCancelCode(e.target.value)}
+            onChange={(e) => { setCancelCode(e.target.value); setError(""); }}
             placeholder="4자리 이상"
           />
         </label>
@@ -49,6 +54,8 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
           <span>기도제목 / 메모</span>
           <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="선택 입력" />
         </label>
+
+        {error && <p className="modalError" role="alert">{error}</p>}
 
         <div className="modalActions">
           <button type="button" onClick={handleSave}>예약 저장</button>

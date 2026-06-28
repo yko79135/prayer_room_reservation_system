@@ -1241,3 +1241,59 @@ textarea:focus {
     padding: 12px;
   }
 }
+
+.modalError {
+  margin: -4px 0 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(153, 67, 46, 0.22);
+  border-radius: 16px;
+  background: #fff7f4;
+  color: #9e402c;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.modalMessage {
+  margin: -6px 0 20px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 600;
+}
+
+.modalActions .dangerButton {
+  background: linear-gradient(135deg, #8f3526, #b04a34);
+}
+
+.toastNotice {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 70;
+  width: min(360px, calc(100% - 40px));
+  border: 1px solid rgba(201, 157, 91, 0.24);
+  border-radius: 18px;
+  background: rgba(255, 250, 242, 0.96);
+  color: var(--brown);
+  padding: 15px 18px;
+  font-weight: 800;
+  box-shadow: 0 18px 44px rgba(57, 39, 25, 0.16);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 560px) {
+  .modalBackdrop {
+    align-items: start;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .modal {
+    margin: auto 0;
+  }
+
+  .toastNotice {
+    right: 16px;
+    bottom: 16px;
+    width: calc(100% - 32px);
+  }
+}
