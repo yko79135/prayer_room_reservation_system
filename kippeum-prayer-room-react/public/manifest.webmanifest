@@ -9,16 +9,10 @@
   "theme_color": "#ead2ae",
   "icons": [
     {
-      "src": "/kippeum-app-icon.png?v=2",
+      "src": "/kippeum-app-icon-v3.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/kippeum-app-icon.png?v=2",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
