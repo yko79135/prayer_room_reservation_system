@@ -1,26 +1,7 @@
 import { CalendarDays, Clock, Lock } from "lucide-react";
 import heroImage from "../assets/kippeum-church-hero.png";
 import logoImage from "../assets/kippeum-church-logo-original.png";
-import { ADMIN_PASSWORD } from "../hooks/useReservations";
-
-export function Hero({ isAdminMode, onAdminModeChange }) {
-  function handleAdminClick() {
-    if (isAdminMode) {
-      onAdminModeChange(false);
-      return;
-    }
-
-    const password = prompt("관리자 비밀번호를 입력하세요.");
-
-    if (!password) return;
-
-    if (password !== ADMIN_PASSWORD) {
-      alert("관리자 비밀번호가 틀렸습니다.");
-      return;
-    }
-
-    onAdminModeChange(true);
-  }
+export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
 
   return (
     <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
@@ -40,11 +21,12 @@ export function Hero({ isAdminMode, onAdminModeChange }) {
           </div>
         </div>
         <button
+          ref={adminButtonRef}
           className={`adminButton${isAdminMode ? " active" : ""}`}
           type="button"
           aria-label={isAdminMode ? "관리자 모드 종료" : "관리자 모드 시작"}
           aria-pressed={isAdminMode}
-          onClick={handleAdminClick}
+          onClick={onAdminClick}
         >
           <Lock size={17} />
           {isAdminMode ? "관리자 모드" : "관리자"}

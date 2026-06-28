@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Lock } from "lucide-react";
+import { ConfirmModal } from "./ConfirmModal";
+import { ReservationAuthModal } from "./ReservationAuthModal";
 import { normalizeName } from "../hooks/useReservations";
 
 export function ReservationList({
@@ -8,11 +10,15 @@ export function ReservationList({
   loading,
   isAdminMode,
   onDeleteReservation,
-  onDeleteReservationsByIds
+  onDeleteReservationsByIds,
+  onNotify
 }) {
   const [selectionMode, setSelectionMode] = useState(null);
   const [selectableIds, setSelectableIds] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [authModal, setAuthModal] = useState(null);
+  const [authError, setAuthError] = useState("");
+  const [confirmConfig, setConfirmConfig] = useState(null);
 
   const selectableIdSet = useMemo(() => new Set(selectableIds), [selectableIds]);
   const selectedCount = selectedIds.length;
@@ -29,11 +35,15 @@ export function ReservationList({
   }
 
   function startUserSelection() {
-    const name = prompt("예약자 이름을 입력하세요.");
-    if (!name) return;
+    setAuthError("");
+    setAuthModal({ mode: "selection" });
+  }
 
-    const password = prompt("예약 취소 비밀번호를 입력하세요.");
-    if (!password) return;
+  function submitUserSelection({ name, password }) {
+    if (!name.trim() || !password) {
+      setAuthError("예약자 이름과 취소 비밀번호를 입력해주세요.");
+      return;
+    }
 
     const normalizedName = normalizeName(name);
     const matchingReservations = reservations.filter(
@@ -42,10 +52,12 @@ export function ReservationList({
     );
 
     if (matchingReservations.length === 0) {
-      alert("이름 또는 취소 비밀번호가 일치하는 예약이 없습니다.");
+      setAuthError("이름 또는 취소 비밀번호가 일치하는 예약이 없습니다.");
       return;
     }
 
+    setAuthModal(null);
+    setAuthError("");
     setSelectionMode("user");
     setSelectableIds(matchingReservations.map((reservation) => reservation.id));
     setSelectedIds([]);
@@ -71,22 +83,69 @@ export function ReservationList({
     setSelectedIds([]);
   }
 
-  async function deleteSelectedReservations() {
+  function deleteSelectedReservations() {
     if (selectedCount === 0) {
-      alert("취소할 예약을 선택해주세요.");
+      onNotify("취소할 예약을 선택해주세요.");
       return;
     }
 
-    if (!confirm(`선택한 예약 ${selectedCount}개를 취소하시겠습니까?`)) {
-      return;
-    }
+    setConfirmConfig({
+      title: isAdminMode ? "예약 삭제" : "예약 취소",
+      message: isAdminMode ? "선택한 예약을 삭제하시겠습니까?" : "선택한 예약을 취소하시겠습니까?",
+      cancelLabel: isAdminMode ? "취소" : "돌아가기",
+      confirmLabel: isAdminMode ? "삭제" : "예약 취소",
+      onConfirm: async () => {
+        setConfirmConfig(null);
+        const deletedCount = selectedCount;
+        const success = await onDeleteReservationsByIds(selectedIds, {
+          successMessage: `선택한 예약 ${deletedCount}개가 취소되었습니다.`
+        });
 
-    const deletedCount = selectedCount;
-    const success = await onDeleteReservationsByIds(selectedIds, {
-      successMessage: `선택한 예약 ${deletedCount}개가 취소되었습니다.`
+        if (success) clearSelection();
+      }
     });
+  }
 
-    if (success) clearSelection();
+  function requestSingleDelete(reservation) {
+    if (isAdminMode) {
+      setConfirmConfig({
+        title: "예약 삭제",
+        message: "선택한 예약을 삭제하시겠습니까?",
+        cancelLabel: "취소",
+        confirmLabel: "삭제",
+        onConfirm: async () => {
+          setConfirmConfig(null);
+          await onDeleteReservation(reservation, { isAdminMode: true });
+        }
+      });
+      return;
+    }
+
+    setAuthError("");
+    setAuthModal({ mode: "single", reservation });
+  }
+
+  function submitSingleDelete({ reservation, password }) {
+    if (!password) {
+      setAuthError("예약 취소 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    setAuthModal(null);
+    setConfirmConfig({
+      title: "예약 취소",
+      message: "선택한 예약을 취소하시겠습니까?",
+      cancelLabel: "돌아가기",
+      confirmLabel: "예약 취소",
+      onConfirm: async () => {
+        setConfirmConfig(null);
+        const success = await onDeleteReservation(reservation, { password });
+        if (!success) {
+          setAuthError("비밀번호가 틀렸습니다.");
+          setAuthModal({ mode: "single", reservation });
+        }
+      }
+    });
   }
 
   return (
@@ -175,7 +234,7 @@ export function ReservationList({
                     <button
                       type="button"
                       aria-label={`${r.time} ${r.name} 예약만 취소`}
-                      onClick={() => onDeleteReservation(r)}
+                      onClick={() => requestSingleDelete(r)}
                     >
                       이 예약만 취소
                     </button>
@@ -186,6 +245,25 @@ export function ReservationList({
           })
         )}
       </div>
+      <ReservationAuthModal
+        open={Boolean(authModal)}
+        mode={authModal?.mode}
+        reservation={authModal?.reservation}
+        error={authError}
+        onClose={() => { setAuthModal(null); setAuthError(""); }}
+        onSubmit={authModal?.mode === "single" ? submitSingleDelete : submitUserSelection}
+      />
+
+      <ConfirmModal
+        open={Boolean(confirmConfig)}
+        title={confirmConfig?.title}
+        message={confirmConfig?.message}
+        cancelLabel={confirmConfig?.cancelLabel}
+        confirmLabel={confirmConfig?.confirmLabel}
+        destructive
+        onCancel={() => setConfirmConfig(null)}
+        onConfirm={confirmConfig?.onConfirm}
+      />
     </aside>
   );
 }
