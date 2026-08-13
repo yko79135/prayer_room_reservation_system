@@ -237,7 +237,7 @@ textarea:focus-visible {
 .heroText h1 {
   max-width: 100%;
   margin: 14px 0 0;
-  font-size: min(6.9vw, 5.2rem);
+  font-size: min(8.5vw, 5.2rem);
   line-height: 1.04;
   letter-spacing: -0.075em;
   font-weight: 800;
