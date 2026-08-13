@@ -35,11 +35,7 @@ export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
 
       <div className="heroText">
         <span className="heroKicker">KIPPEUM PRAYER ROOM</span>
-        <h1>
-          옥상 “잠근동산” 기도실
-          <br />
-          예약 시스템
-        </h1>
+        <h1>옥상 “잠근동산” 기도실</h1>
         <p>
           기도로 하루를 시작하고, 기도로 하루를 마무리하세요.
           <br />
