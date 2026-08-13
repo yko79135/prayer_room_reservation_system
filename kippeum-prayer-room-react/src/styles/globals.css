@@ -235,13 +235,14 @@ textarea:focus-visible {
 }
 
 .heroText h1 {
-  max-width: 660px;
+  max-width: 100%;
   margin: 14px 0 0;
-  font-size: clamp(2.65rem, 5.6vw, 5.2rem);
+  font-size: min(6.9vw, 5.2rem);
   line-height: 1.04;
   letter-spacing: -0.075em;
   font-weight: 800;
   text-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+  white-space: nowrap;
 }
 
 .heroText p {
@@ -1036,10 +1037,6 @@ textarea:focus {
 
   .adminButton {
     padding: 10px 13px;
-  }
-
-  .heroText h1 {
-    font-size: clamp(2.45rem, 13vw, 3.25rem);
   }
 
   .heroMeta {
