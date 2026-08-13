@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import heroImage from "../assets/kippeum-church-hero.png";
 import logoImage from "../assets/kippeum-church-logo-original.png";
 export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
@@ -41,14 +41,6 @@ export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
           <br />
           하나님은 우리의 기도를 들으십니다.
         </p>
-        <div className="heroMeta">
-          <span>
-            <Clock size={19} />1시간 단위
-          </span>
-          <span>
-            <CalendarDays size={19} />오전 7시부터 예약 가능
-          </span>
-        </div>
         <span className="heroBlessing">조용한 기도의 자리로 초대합니다</span>
       </div>
     </section>
