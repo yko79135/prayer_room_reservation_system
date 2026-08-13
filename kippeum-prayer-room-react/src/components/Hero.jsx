@@ -36,7 +36,7 @@ export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
       <div className="heroText">
         <span className="heroKicker">KIPPEUM PRAYER ROOM</span>
         <h1>
-          옥상 기도실
+          옥상 “잠근동산” 기도실
           <br />
           예약 시스템
         </h1>
@@ -47,10 +47,10 @@ export function Hero({ isAdminMode, onAdminClick, adminButtonRef }) {
         </p>
         <div className="heroMeta">
           <span>
-            <Clock size={19} />30분 단위
+            <Clock size={19} />1시간 단위
           </span>
           <span>
-            <CalendarDays size={19} />24시간 예약 가능
+            <CalendarDays size={19} />오전 7시부터 예약 가능
           </span>
         </div>
         <span className="heroBlessing">조용한 기도의 자리로 초대합니다</span>

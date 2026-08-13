@@ -1,13 +1,13 @@
 # Kippeum Church Prayer Room Reservation App
 
-React + Vite + Supabase reservation app for 기쁨교회 옥상 기도실.
+React + Vite + Supabase reservation app for 기쁨교회 옥상 “잠근동산” 기도실.
 
 ## Features
 
-- 30-minute reservation slots
-- 24-hour reservation system
+- One-hour reservation slots from 7:00 AM through 10:00 PM
+- One reservation hour per person each week
 - Book from now up to one month ahead
-- Select and reserve multiple slots at once
+- Select and reserve one available hour
 - No phone number required
 - User can delete with cancellation password
 - Admin can delete with admin password

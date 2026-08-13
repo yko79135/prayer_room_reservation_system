@@ -4,7 +4,6 @@ import { X } from "lucide-react";
 export function ReservationModal({ selectedSlots, onClose, onSave }) {
   const [name, setName] = useState("");
   const [cancelCode, setCancelCode] = useState("");
-  const [note, setNote] = useState("");
   const [error, setError] = useState("");
 
   async function handleSave() {
@@ -17,7 +16,7 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
       return;
     }
 
-    const success = await onSave({ name, cancelCode, note });
+    const success = await onSave({ name, cancelCode });
     if (success) onClose();
   }
 
@@ -48,11 +47,6 @@ export function ReservationModal({ selectedSlots, onClose, onSave }) {
             onChange={(e) => { setCancelCode(e.target.value); setError(""); }}
             placeholder="4자리 이상"
           />
-        </label>
-
-        <label>
-          <span>기도제목 / 메모</span>
-          <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="선택 입력" />
         </label>
 
         {error && <p className="modalError" role="alert">{error}</p>}

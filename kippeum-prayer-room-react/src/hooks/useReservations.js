@@ -33,11 +33,20 @@ export function timeToMinutes(time) {
 
 export function generateSlots() {
   const slots = [];
-  for (let h = 0; h < 24; h++) {
+  for (let h = 7; h < 23; h++) {
     slots.push(`${pad(h)}:00`);
-    slots.push(`${pad(h)}:30`);
   }
   return slots;
+}
+
+export function weekRange(date) {
+  const selectedDate = new Date(`${date}T12:00:00`);
+  const dayFromMonday = (selectedDate.getDay() + 6) % 7;
+  const start = new Date(selectedDate);
+  start.setDate(start.getDate() - dayFromMonday);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  return { start: toDateString(start), end: toDateString(end) };
 }
 
 export function reservationKey(date, time) {
@@ -101,20 +110,35 @@ export function useReservations(date, notify = () => {}) {
         return prev.filter((s) => s.reservation_key !== key);
       }
 
-      return [...prev, { date, time, reservation_key: key }].sort((a, b) =>
-        a.time.localeCompare(b.time)
-      );
+      return [{ date, time, reservation_key: key }];
     });
   }
 
-  async function saveReservation({ name, cancelCode, note }) {
+  async function saveReservation({ name, cancelCode }) {
+    const normalizedName = normalizeName(name);
+    const { start, end } = weekRange(date);
+    const { data: weeklyReservations, error: weeklyError } = await supabase
+      .from(TABLE_NAME)
+      .select("name")
+      .gte("date", start)
+      .lte("date", end);
+
+    if (weeklyError) {
+      notify("주간 예약 내역을 확인하지 못했습니다: " + weeklyError.message);
+      return false;
+    }
+
+    if ((weeklyReservations || []).some((reservation) => normalizeName(reservation.name) === normalizedName)) {
+      notify("기도실은 개인당 일주일에 1시간만 이용할 수 있습니다.");
+      return false;
+    }
+
     const payloads = selectedSlots.map((slot) => ({
       reservation_key: slot.reservation_key,
       date: slot.date,
       time: slot.time,
-      name: name.trim(),
-      cancel_code: cancelCode.trim(),
-      note: note.trim()
+      name: normalizedName,
+      cancel_code: cancelCode.trim()
     }));
 
     const { error } = await supabase.from(TABLE_NAME).insert(payloads);

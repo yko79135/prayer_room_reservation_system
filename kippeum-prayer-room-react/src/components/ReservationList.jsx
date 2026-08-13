@@ -227,7 +227,6 @@ export function ReservationList({
                 <div className="reservationDetails">
                   <strong>{r.time}</strong>
                   <span>{r.name}</span>
-                  {r.note && <small>{r.note}</small>}
                 </div>
                 {!isSelecting && (
                   <div className="reservationActions">
