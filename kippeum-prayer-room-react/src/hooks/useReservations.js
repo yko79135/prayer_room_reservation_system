@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase, TABLE_NAME } from "../lib/supabase";
 
-export const ADMIN_PASSWORD = "출애굽기4034";
+export const ADMIN_PASSWORD = "kippeum4034";
 
 export function pad(n) {
   return String(n).padStart(2, "0");
