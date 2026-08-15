@@ -62,6 +62,28 @@ export function isPastSlot(date, time) {
   return timeToMinutes(time) <= nowMinutes();
 }
 
+// One-off full-day closures (specific calendar dates).
+export const BLOCKED_DATES = ["2026-08-15", "2026-08-16"];
+
+// Recurring weekly closures, keyed by JS Date#getDay() (0 = Sunday, 5 = Friday).
+// Ranges are [start, end) in slot start-times.
+const RECURRING_BLOCKS = [
+  { day: 5, start: "20:00", end: "22:00" }, // 매주 금요일 오후 8-10시
+  { day: 0, start: "09:00", end: "11:00" }, // 매주 일요일 오전 9-11시
+  { day: 0, start: "11:00", end: "13:00" } // 매주 일요일 오전 11시-오후 1시
+];
+
+export function isBlockedSlot(date, time) {
+  if (BLOCKED_DATES.includes(date)) return true;
+
+  const day = new Date(`${date}T12:00:00`).getDay();
+  const minutes = timeToMinutes(time);
+
+  return RECURRING_BLOCKS.some(
+    (block) => block.day === day && minutes >= timeToMinutes(block.start) && minutes < timeToMinutes(block.end)
+  );
+}
+
 export function useReservations(date, notify = () => {}) {
   const [reservations, setReservations] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
@@ -96,7 +118,7 @@ export function useReservations(date, notify = () => {}) {
   }, [loadReservations]);
 
   function toggleSlot(time) {
-    if (date < todayString() || date > maxDateString() || isPastSlot(date, time)) {
+    if (date < todayString() || date > maxDateString() || isPastSlot(date, time) || isBlockedSlot(date, time)) {
       notify("예약 가능한 시간이 아닙니다.");
       return;
     }
