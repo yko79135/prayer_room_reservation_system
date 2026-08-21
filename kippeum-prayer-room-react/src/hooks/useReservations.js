@@ -69,7 +69,6 @@ export const BLOCKED_DATES = ["2026-08-15", "2026-08-16"];
 // Ranges are [start, end) in slot start-times.
 const RECURRING_BLOCKS = [
   { day: 5, start: "20:00", end: "22:00" }, // 매주 금요일 오후 8-10시
-  { day: 0, start: "09:00", end: "11:00" }, // 매주 일요일 오전 9-11시
   { day: 0, start: "11:00", end: "13:00" } // 매주 일요일 오전 11시-오후 1시
 ];
 
