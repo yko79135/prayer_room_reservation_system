@@ -286,6 +286,92 @@ textarea:focus-visible {
   align-items: start;
 }
 
+.shell.shellHistory {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.adminTabs {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  width: fit-content;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+}
+
+.adminTab {
+  min-height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.adminTab:hover {
+  color: var(--ink);
+}
+
+.adminTab.active {
+  background: linear-gradient(145deg, #fbf0dc, #f3dfbf);
+  color: #8a5d2c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.historyTableWrap {
+  margin-top: 22px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.historyTable {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+}
+
+.historyTable th,
+.historyTable td {
+  padding: 14px 18px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.historyTable thead th {
+  background: rgba(201, 157, 91, 0.14);
+  color: #8a5d2c;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.historyTable tbody tr {
+  border-top: 1px solid var(--line);
+}
+
+.historyTable tbody tr:nth-child(even) {
+  background: rgba(255, 250, 242, 0.6);
+}
+
+.historyTable tbody tr:hover {
+  background: rgba(201, 157, 91, 0.1);
+}
+
+.historyTable td {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .bookingCard,
 .sideCard,
 .modal {
