@@ -151,10 +151,10 @@ export function ReservationList({
   return (
     <aside className="sideCard" aria-labelledby="reservation-list-title">
       <div className="iconCircle large"><Lock size={30} /></div>
-      <h2 id="reservation-list-title">예약 취소</h2>
+      <h2 id="reservation-list-title">{isAdminMode ? "예약 내역" : "예약 취소"}</h2>
       <p>
         {isAdminMode
-          ? "관리자 모드에서는 비밀번호 없이 예약을 삭제할 수 있습니다."
+          ? "관리자 모드에서는 모든 날짜의 예약 내역을 확인하고, 비밀번호 없이 삭제할 수 있습니다."
           : "예약 시 받은 취소 비밀번호로 본인 예약을 삭제할 수 있습니다."}
       </p>
 
@@ -191,7 +191,9 @@ export function ReservationList({
         {loading ? (
           <p className="reservationState loadingState">예약을 불러오는 중입니다...</p>
         ) : reservations.length === 0 ? (
-          <p className="reservationState">이 날짜에는 아직 예약이 없습니다.</p>
+          <p className="reservationState">
+            {isAdminMode ? "아직 예약 내역이 없습니다." : "이 날짜에는 아직 예약이 없습니다."}
+          </p>
         ) : (
           reservations.map((r) => {
             const isSelectable = isSelecting && selectableIdSet.has(r.id);
@@ -225,7 +227,7 @@ export function ReservationList({
                   />
                 )}
                 <div className="reservationDetails">
-                  <strong>{r.time}</strong>
+                  <strong>{isAdminMode ? `${r.date} ${r.time}` : r.time}</strong>
                   <span>{r.name}</span>
                 </div>
                 {!isSelecting && (
