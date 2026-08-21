@@ -33,7 +33,7 @@ export function timeToMinutes(time) {
 
 export function generateSlots() {
   const slots = [];
-  for (let h = 7; h < 23; h++) {
+  for (let h = 6; h < 23; h++) {
     slots.push(`${pad(h)}:00`);
   }
   return slots;
@@ -84,7 +84,7 @@ export function isBlockedSlot(date, time) {
   );
 }
 
-export function useReservations(date, notify = () => {}) {
+export function useReservations(date, notify = () => {}, isAdminMode = false) {
   const [reservations, setReservations] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -97,11 +97,16 @@ export function useReservations(date, notify = () => {}) {
     setSelectedSlots([]);
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from(TABLE_NAME)
-      .select("*")
-      .eq("date", date)
-      .order("time", { ascending: true });
+    let query = supabase.from(TABLE_NAME).select("*");
+
+    if (isAdminMode) {
+      // Admins can review the full reservation history, not just one date.
+      query = query.order("date", { ascending: false }).order("time", { ascending: true });
+    } else {
+      query = query.eq("date", date).order("time", { ascending: true });
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       notify("예약 정보를 불러오지 못했습니다: " + error.message);
@@ -111,7 +116,7 @@ export function useReservations(date, notify = () => {}) {
     }
 
     setLoading(false);
-  }, [date]);
+  }, [date, isAdminMode]);
 
   useEffect(() => {
     loadReservations();

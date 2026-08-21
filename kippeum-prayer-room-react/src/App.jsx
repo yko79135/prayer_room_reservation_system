@@ -24,7 +24,7 @@ export function App() {
     saveReservation,
     deleteReservation,
     deleteReservationsByIds
-  } = useReservations(date, showToast);
+  } = useReservations(date, showToast, isAdminMode);
 
   function openReserveModal() {
     if (selectedSlots.length === 0) {
