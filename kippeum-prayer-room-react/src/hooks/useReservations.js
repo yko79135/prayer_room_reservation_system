@@ -39,16 +39,6 @@ export function generateSlots() {
   return slots;
 }
 
-export function weekRange(date) {
-  const selectedDate = new Date(`${date}T12:00:00`);
-  const dayFromMonday = (selectedDate.getDay() + 6) % 7;
-  const start = new Date(selectedDate);
-  start.setDate(start.getDate() - dayFromMonday);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 6);
-  return { start: toDateString(start), end: toDateString(end) };
-}
-
 export function reservationKey(date, time) {
   return `${date}_${time}`;
 }
@@ -142,22 +132,6 @@ export function useReservations(date, notify = () => {}, isAdminMode = false) {
 
   async function saveReservation({ name, cancelCode }) {
     const normalizedName = normalizeName(name);
-    const { start, end } = weekRange(date);
-    const { data: weeklyReservations, error: weeklyError } = await supabase
-      .from(TABLE_NAME)
-      .select("name")
-      .gte("date", start)
-      .lte("date", end);
-
-    if (weeklyError) {
-      notify("주간 예약 내역을 확인하지 못했습니다: " + weeklyError.message);
-      return false;
-    }
-
-    if ((weeklyReservations || []).some((reservation) => normalizeName(reservation.name) === normalizedName)) {
-      notify("기도실은 개인당 일주일에 1시간만 이용할 수 있습니다.");
-      return false;
-    }
 
     const payloads = selectedSlots.map((slot) => ({
       reservation_key: slot.reservation_key,
