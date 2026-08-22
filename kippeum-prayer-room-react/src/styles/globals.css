@@ -462,6 +462,28 @@ h3 {
   line-height: 1.72;
 }
 
+.guideSections {
+  display: grid;
+  gap: 18px;
+}
+
+.guideSections .guideSection ul {
+  display: block;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.guideSections .guideSection li {
+  margin-bottom: 4px;
+}
+
+.guideSection h4 {
+  margin: 0 0 6px;
+  color: #7a4f1f;
+  font-size: 0.98rem;
+  letter-spacing: -0.02em;
+}
+
 .divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--line), transparent);
