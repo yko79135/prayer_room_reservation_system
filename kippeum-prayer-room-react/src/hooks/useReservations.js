@@ -55,22 +55,32 @@ export function isPastSlot(date, time) {
 // One-off full-day closures (specific calendar dates).
 export const BLOCKED_DATES = ["2026-08-15", "2026-08-16"];
 
+// Label shown on slots closed by a one-off full-day closure.
+export const BLOCKED_DATE_LABEL = "예약 마감";
+
 // Recurring weekly closures, keyed by JS Date#getDay() (0 = Sunday, 5 = Friday).
-// Ranges are [start, end) in slot start-times.
+// Ranges are [start, end) in slot start-times. The label is shown on the slot.
 const RECURRING_BLOCKS = [
-  { day: 5, start: "20:00", end: "22:00" }, // 매주 금요일 오후 8-10시
-  { day: 0, start: "11:00", end: "13:00" } // 매주 일요일 오전 11시-오후 1시
+  { day: 5, start: "20:00", end: "22:00", label: "금요철야" }, // 매주 금요일 오후 8-10시
+  { day: 0, start: "11:00", end: "13:00", label: "주일예배" } // 매주 일요일 오전 11시-오후 1시
 ];
 
-export function isBlockedSlot(date, time) {
-  if (BLOCKED_DATES.includes(date)) return true;
+// Returns the label for a closed slot, or null when the slot is open.
+export function blockedSlotLabel(date, time) {
+  if (BLOCKED_DATES.includes(date)) return BLOCKED_DATE_LABEL;
 
   const day = new Date(`${date}T12:00:00`).getDay();
   const minutes = timeToMinutes(time);
 
-  return RECURRING_BLOCKS.some(
-    (block) => block.day === day && minutes >= timeToMinutes(block.start) && minutes < timeToMinutes(block.end)
+  const block = RECURRING_BLOCKS.find(
+    (b) => b.day === day && minutes >= timeToMinutes(b.start) && minutes < timeToMinutes(b.end)
   );
+
+  return block ? block.label : null;
+}
+
+export function isBlockedSlot(date, time) {
+  return blockedSlotLabel(date, time) !== null;
 }
 
 export function useReservations(date, notify = () => {}, isAdminMode = false) {
