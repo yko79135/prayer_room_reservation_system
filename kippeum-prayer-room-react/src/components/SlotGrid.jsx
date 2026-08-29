@@ -1,4 +1,4 @@
-import { generateSlots, isBlockedSlot, isPastSlot, reservationKey } from "../hooks/useReservations";
+import { blockedSlotLabel, generateSlots, isPastSlot, reservationKey } from "../hooks/useReservations";
 
 export function SlotGrid({ date, reservationsByKey, selectedSlots, onToggleSlot }) {
   return (
@@ -7,7 +7,8 @@ export function SlotGrid({ date, reservationsByKey, selectedSlots, onToggleSlot 
         const key = reservationKey(date, time);
         const reservation = reservationsByKey[key];
         const past = isPastSlot(date, time);
-        const blocked = isBlockedSlot(date, time);
+        const blockedLabel = blockedSlotLabel(date, time);
+        const blocked = blockedLabel !== null;
         const selected = selectedSlots.some((s) => s.reservation_key === key);
 
         let className = "slot available";
@@ -15,7 +16,7 @@ export function SlotGrid({ date, reservationsByKey, selectedSlots, onToggleSlot 
 
         if (reservation || past || blocked) {
           className = "slot disabled";
-          label = reservation ? "예약 완료" : blocked ? "예약 마감" : "예약 불가";
+          label = reservation ? "예약 완료" : blocked ? blockedLabel : "예약 불가";
         } else if (selected) {
           className = "slot selected";
           label = "선택됨";
