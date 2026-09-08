@@ -61,7 +61,7 @@ export const BLOCKED_DATE_LABEL = "예약 마감";
 // Recurring weekly closures, keyed by JS Date#getDay() (0 = Sunday, 5 = Friday).
 // Ranges are [start, end) in slot start-times. The label is shown on the slot.
 const RECURRING_BLOCKS = [
-  { day: 5, start: "20:00", end: "22:00", label: "금요철야" }, // 매주 금요일 오후 8-10시
+  { day: 5, start: "20:00", end: "22:00", label: "금요기도회" }, // 매주 금요일 오후 8-10시
   { day: 0, start: "11:00", end: "13:00", label: "주일예배" } // 매주 일요일 오전 11시-오후 1시
 ];
 
