@@ -1354,6 +1354,26 @@ textarea:focus {
   font-weight: 600;
 }
 
+.confirmDetails {
+  margin: -10px 0 20px;
+  padding: 12px 14px;
+  max-height: 240px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid rgba(201, 157, 91, 0.28);
+  border-radius: 16px;
+  background: #fffaf2;
+  color: var(--brown);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.confirmDetails li + li {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(201, 157, 91, 0.18);
+}
+
 .modalActions .dangerButton {
   background: linear-gradient(135deg, #8f3526, #b04a34);
 }

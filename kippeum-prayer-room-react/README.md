@@ -33,6 +33,27 @@ supabase_update.sql
 
 in Supabase SQL Editor.
 
+### Deletion audit log
+
+Reservations are hard-deleted, so without this there is no record of what a
+deleted reservation held. Run `supabase_deletion_audit.sql` once in the SQL
+Editor to add a `deleted_reservations` table and a `before delete` trigger that
+copies every deleted row, whoever deleted it and however it was deleted.
+
+The table has RLS on and no policies, so the publishable key cannot read it —
+query it from the SQL Editor:
+
+```sql
+select deleted_at, deleted_by, date, time, name, reserved_at
+from deleted_reservations
+order by deleted_at desc
+limit 50;
+```
+
+`deleted_by` is `admin` for deletions made in admin mode, `member` for someone
+cancelling with their own cancellation password, and `unknown` for anything
+that did not come through the app (a SQL Editor or dashboard delete).
+
 ## Design notes for Codex
 
 Keep the wide hero image ratio. Do not stretch the church photo vertically.
