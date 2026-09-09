@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase, TABLE_NAME } from "../lib/supabase";
+import { supabase, supabaseAdmin, TABLE_NAME } from "../lib/supabase";
 
 export const ADMIN_PASSWORD = "kippeum4034";
 
@@ -168,13 +168,14 @@ export function useReservations(date, notify = () => {}, isAdminMode = false) {
     return true;
   }
 
-  async function deleteReservation(reservation, { isAdminMode = false, password = "" } = {}) {
-    if (!isAdminMode && password !== ADMIN_PASSWORD && password !== reservation.cancel_code) {
+  async function deleteReservation(reservation, { isAdminMode: asAdmin = false, password = "" } = {}) {
+    if (!asAdmin && password !== ADMIN_PASSWORD && password !== reservation.cancel_code) {
       notify("비밀번호가 틀렸습니다.");
       return false;
     }
 
-    const { error } = await supabase.from(TABLE_NAME).delete().eq("id", reservation.id);
+    const client = asAdmin || password === ADMIN_PASSWORD ? supabaseAdmin : supabase;
+    const { error } = await client.from(TABLE_NAME).delete().eq("id", reservation.id);
 
     if (error) {
       notify("삭제 실패: " + error.message);
@@ -192,7 +193,8 @@ export function useReservations(date, notify = () => {}, isAdminMode = false) {
       return false;
     }
 
-    const { error } = await supabase.from(TABLE_NAME).delete().in("id", ids);
+    const client = isAdminMode ? supabaseAdmin : supabase;
+    const { error } = await client.from(TABLE_NAME).delete().in("id", ids);
 
     if (error) {
       notify("삭제 실패: " + error.message);

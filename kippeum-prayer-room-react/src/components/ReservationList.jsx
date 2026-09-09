@@ -4,6 +4,15 @@ import { ConfirmModal } from "./ConfirmModal";
 import { ReservationAuthModal } from "./ReservationAuthModal";
 import { normalizeName } from "../hooks/useReservations";
 
+// What the confirm dialog spells out before anything is deleted. Admin mode
+// lists every date at once, so the date has to be part of the label there.
+function describeReservation(reservation, withDate) {
+  return {
+    id: reservation.id,
+    label: `${withDate ? `${reservation.date} ` : ""}${reservation.time} · ${reservation.name}`
+  };
+}
+
 export function ReservationList({
   date,
   reservations,
@@ -91,7 +100,12 @@ export function ReservationList({
 
     setConfirmConfig({
       title: isAdminMode ? "예약 삭제" : "예약 취소",
-      message: isAdminMode ? "선택한 예약을 삭제하시겠습니까?" : "선택한 예약을 취소하시겠습니까?",
+      message: isAdminMode
+        ? `아래 예약 ${selectedCount}개를 삭제합니다. 삭제하면 되돌릴 수 없습니다.`
+        : `아래 예약 ${selectedCount}개를 취소합니다.`,
+      details: reservations
+        .filter((reservation) => selectedIds.includes(reservation.id))
+        .map((reservation) => describeReservation(reservation, isAdminMode)),
       cancelLabel: isAdminMode ? "취소" : "돌아가기",
       confirmLabel: isAdminMode ? "삭제" : "예약 취소",
       onConfirm: async () => {
@@ -110,7 +124,8 @@ export function ReservationList({
     if (isAdminMode) {
       setConfirmConfig({
         title: "예약 삭제",
-        message: "선택한 예약을 삭제하시겠습니까?",
+        message: "아래 예약을 삭제합니다. 삭제하면 되돌릴 수 없습니다.",
+        details: [describeReservation(reservation, true)],
         cancelLabel: "취소",
         confirmLabel: "삭제",
         onConfirm: async () => {
@@ -134,7 +149,8 @@ export function ReservationList({
     setAuthModal(null);
     setConfirmConfig({
       title: "예약 취소",
-      message: "선택한 예약을 취소하시겠습니까?",
+      message: "아래 예약을 취소합니다.",
+      details: [describeReservation(reservation, false)],
       cancelLabel: "돌아가기",
       confirmLabel: "예약 취소",
       onConfirm: async () => {
@@ -259,6 +275,7 @@ export function ReservationList({
         open={Boolean(confirmConfig)}
         title={confirmConfig?.title}
         message={confirmConfig?.message}
+        details={confirmConfig?.details}
         cancelLabel={confirmConfig?.cancelLabel}
         confirmLabel={confirmConfig?.confirmLabel}
         destructive
