@@ -65,9 +65,13 @@ const RECURRING_BLOCKS = [
   { day: 0, start: "11:00", end: "13:00", label: "주일예배" } // 매주 일요일 오전 11시-오후 1시
 ];
 
+// One-off dates on which the recurring weekly closures are lifted and the slots open.
+export const RECURRING_BLOCK_EXCEPTIONS = ["2026-09-25"]; // 2026-09-25 금요기도회 없음
+
 // Returns the label for a closed slot, or null when the slot is open.
 export function blockedSlotLabel(date, time) {
   if (BLOCKED_DATES.includes(date)) return BLOCKED_DATE_LABEL;
+  if (RECURRING_BLOCK_EXCEPTIONS.includes(date)) return null;
 
   const day = new Date(`${date}T12:00:00`).getDay();
   const minutes = timeToMinutes(time);
